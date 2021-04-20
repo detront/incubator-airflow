@@ -336,19 +336,22 @@ class KubernetesJobWatcher(multiprocessing.Process, LoggingMixin):
     def run(self):
         """Performs watching"""
         kube_client = get_kube_client()
-        while True:
+        timeout_retry = 10
+        while timeout_retry > 0:
             try:
                 self.resource_version = self._run(kube_client, self.resource_version,
                                                   self.worker_uuid, self.kube_config)
-            except ReadTimeoutError:
-                self.log.warning(
-                    "There was a timeout error accessing the Kube API. Retrying request.",
-                    exc_info=True
-                )
-                time.sleep(1)
-            except Exception:
-                self.log.exception('Unknown error in KubernetesJobWatcher. Failing')
-                raise
+            except Exception as err:
+                timeout_retry -= 1
+                if isinstance(err, ReadTimeoutError) and timeout_retry > 0:
+                    self.log.warning(
+                        "There was a timeout error accessing the Kube API. Retrying request.",
+                        exc_info=True
+                    )
+                    time.sleep(1)
+                else:
+                    self.log.exception('Unknown error in KubernetesJobWatcher. Failing')
+                    raise err
             else:
                 self.log.warning('Watch died gracefully, starting back up with: '
                                  'last resource_version: %s', self.resource_version)
