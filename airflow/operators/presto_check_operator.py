@@ -23,6 +23,7 @@ from airflow.operators.check_operator import CheckOperator, \
 from airflow.utils.decorators import apply_defaults
 from airflow.utils.helpers import add_airflow_context_comment
 
+
 class PrestoCheckOperator(CheckOperator):
     """
     Performs checks against Presto. The ``PrestoCheckOperator`` expects
