@@ -74,7 +74,7 @@ class PrestoCheckOperator(CheckOperator):
     def pre_execute(self, context):
         self.sql = add_airflow_context_comment(context, self.sql)
 
-        super(PrestoCheckOperator, self).pre_execute(self, context)
+        super(PrestoCheckOperator, self).pre_execute(context)
 
 class PrestoValueCheckOperator(ValueCheckOperator):
     """
@@ -102,7 +102,7 @@ class PrestoValueCheckOperator(ValueCheckOperator):
     def pre_execute(self, context):
         self.sql = add_airflow_context_comment(context, self.sql)
 
-        super(PrestoValueCheckOperator, self).pre_execute(self, context)
+        super(PrestoValueCheckOperator, self).pre_execute(context)
 
 
 class PrestoIntervalCheckOperator(IntervalCheckOperator):
@@ -140,4 +140,4 @@ class PrestoIntervalCheckOperator(IntervalCheckOperator):
         self.sql1 = add_airflow_context_comment(context, self.sql1)
         self.sql2 = add_airflow_context_comment(context, self.sql2)
 
-        super(PrestoIntervalCheckOperator, self).pre_execute(self, context)
+        super(PrestoIntervalCheckOperator, self).pre_execute(context)
