@@ -24,6 +24,7 @@ from airflow.exceptions import AirflowException
 from airflow.hooks.base_hook import BaseHook
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
 from airflow.utils.decorators import apply_defaults
+from airflow.utils.helpers import add_airflow_context_comment
 
 
 class SqlSensor(BaseSensorOperator):
@@ -85,9 +86,10 @@ class SqlSensor(BaseSensorOperator):
 
     def poke(self, context):
         hook = self._get_hook()
+        commented_sql = add_airflow_context_comment(context, self.sql)
 
-        self.log.info('Poking: %s (with parameters %s)', self.sql, self.parameters)
-        records = hook.get_records(self.sql, self.parameters)
+        self.log.info('Poking: %s (with parameters %s)', commented_sql, self.parameters)
+        records = hook.get_records(commented_sql, self.parameters)
         if not records:
             if self.fail_on_empty:
                 raise AirflowException("No rows returned, raising as per fail_on_empty flag")

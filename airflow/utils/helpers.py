@@ -491,3 +491,61 @@ def render_log_filename(ti, try_number, filename_template):
 
 def convert_camel_to_snake(camel_str):
     return re.sub('(?!^)([A-Z]+)', r'_\1', camel_str).lower()
+
+
+def generate_airflow_context_comment(context):
+    """
+    Generates a comment to SQL and HQL queries detailing the current Airflow context.
+
+    The comment format is:
+    -- Airflow Context: {dag_id}.{task_id}.{operator}.{execution_date}
+
+    Example:
+    -- Airflow Context: test_dag.test_presto_operator.PrestoOperator.2020-11-16T00:00:00+00:00
+
+    :param context: Airflow context
+    :type context: Airflow context
+    """
+    ti = context.get('ti', None)
+    if ti is None:
+        return None
+
+    return '-- Airflow Context: {}.{}.{}.{}' \
+        .format(ti.dag_id, ti.task_id, ti.operator, ti.execution_date.isoformat())
+
+
+def add_airflow_context_comment(context, query):
+    """
+    Adds a comment to SQL and HQL queries detailing the current Airflow context.
+
+    The comment format is:
+    -- Airflow Context: {dag_id}.{task_id}.{operator}.{execution_date}
+
+    Example:
+    -- Airflow Context: test_dag.test_presto_operator.PrestoOperator.2020-11-16T00:00:00+00:00
+
+    :param context: Airflow context
+    :type context: Airflow context
+    :param query: The original query or list of queries
+    :type query: str, list
+    :rtype: str, list
+    """
+
+    query_fmt = '{}\n\n{}'
+
+    try:
+        context_comment = generate_airflow_context_comment(context)
+
+        if context_comment is None:
+            return query
+
+        # Some operators support a list with queries
+        # each query in the list is treated individually
+        if isinstance(query, list):
+            return [query_fmt(context_comment, q) for q in query]
+
+        return query_fmt.format(context_comment, query)
+
+    except Exception:
+        # Just return the query unchanged if anything goes wrong.
+        return query
