@@ -497,11 +497,9 @@ def generate_airflow_context_comment(context):
     """
     Generates a comment to SQL and HQL queries detailing the current Airflow context.
 
-    The comment format is:
-    -- Airflow Context: {dag_id}.{task_id}.{operator}.{execution_date}
-
-    Example:
-    -- Airflow Context: test_dag.test_presto_operator.PrestoOperator.2020-11-16T00:00:00+00:00
+    Example: (actual context is all on one line)
+    -- Airflow Context: {'dag_id': 'test_dag', 'task_id': 'test_presto_operator',
+    'operator': 'PrestoOperator', 'execution_date': '2020-11-16T00:00:00+00:00'}
 
     :param context: Airflow context
     :type context: Airflow context
@@ -510,19 +508,23 @@ def generate_airflow_context_comment(context):
     if ti is None:
         return None
 
-    return '-- Airflow Context: {}.{}.{}.{}' \
-        .format(ti.dag_id, ti.task_id, ti.operator, ti.execution_date.isoformat())
+    airflow_context = {
+        'dag_id': ti.dag_id,
+        'task_id': ti.task_id,
+        'operator': ti.operator,
+        'execution_date': ti.execution_date.isoformat()
+    }
+
+    return '-- Airflow Context: {}'.format(airflow_context)
 
 
 def add_airflow_context_comment(context, query):
     """
     Adds a comment to SQL and HQL queries detailing the current Airflow context.
 
-    The comment format is:
-    -- Airflow Context: {dag_id}.{task_id}.{operator}.{execution_date}
-
-    Example:
-    -- Airflow Context: test_dag.test_presto_operator.PrestoOperator.2020-11-16T00:00:00+00:00
+    Example: (actual context is all on one line)
+    -- Airflow Context: {'dag_id': 'test_dag', 'task_id': 'test_presto_operator',
+    'operator': 'PrestoOperator', 'execution_date': '2020-11-16T00:00:00+00:00'}
 
     :param context: Airflow context
     :type context: Airflow context
