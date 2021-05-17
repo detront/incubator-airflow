@@ -21,6 +21,7 @@ from airflow.hooks.presto_hook import PrestoHook
 from airflow.operators.check_operator import CheckOperator, \
     ValueCheckOperator, IntervalCheckOperator
 from airflow.utils.decorators import apply_defaults
+from airflow.utils.helpers import add_airflow_context_comment
 
 
 class PrestoCheckOperator(CheckOperator):
@@ -70,6 +71,10 @@ class PrestoCheckOperator(CheckOperator):
     def get_db_hook(self):
         return PrestoHook(presto_conn_id=self.presto_conn_id)
 
+    def pre_execute(self, context):
+        self.sql = add_airflow_context_comment(context, self.sql)
+
+        super(PrestoCheckOperator, self).pre_execute(context)
 
 class PrestoValueCheckOperator(ValueCheckOperator):
     """
@@ -93,6 +98,11 @@ class PrestoValueCheckOperator(ValueCheckOperator):
 
     def get_db_hook(self):
         return PrestoHook(presto_conn_id=self.presto_conn_id)
+
+    def pre_execute(self, context):
+        self.sql = add_airflow_context_comment(context, self.sql)
+
+        super(PrestoValueCheckOperator, self).pre_execute(context)
 
 
 class PrestoIntervalCheckOperator(IntervalCheckOperator):
@@ -125,3 +135,9 @@ class PrestoIntervalCheckOperator(IntervalCheckOperator):
 
     def get_db_hook(self):
         return PrestoHook(presto_conn_id=self.presto_conn_id)
+
+    def pre_execute(self, context):
+        self.sql1 = add_airflow_context_comment(context, self.sql1)
+        self.sql2 = add_airflow_context_comment(context, self.sql2)
+
+        super(PrestoIntervalCheckOperator, self).pre_execute(context)
