@@ -18,8 +18,9 @@ under the License.
 -->
 
 # Apache Airflow
+================
 
-This is a fork of [Airflow 1.10.9](https://github.com/apache/airflow/tree/1.10.9)
+This is a fork of [Airflow 1.10.15](https://github.com/apache/airflow/tree/1.10.15)
 
 ## Changes in our fork
 
@@ -33,5 +34,5 @@ This is a fork of [Airflow 1.10.9](https://github.com/apache/airflow/tree/1.10.9
 - Propagated improved colours everywhere.
 
 Every change from our fork to the original project can be checked by comparing the
-changes from our `github/incubator-airflow/gh-1.10.9` with the open source project
-`apache/airflow:1.10.9`. For example [link](https://github.com/apache/airflow/compare/1.10.9...github:gh-1.10.9?expand=1)
+changes from our `github/incubator-airflow/gh-1.10.15` with the open source project
+`apache/airflow:1.10.15`. For example [link](https://github.com/apache/airflow/compare/1.10.15...github:gh-1.10.15?expand=1)

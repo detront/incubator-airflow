@@ -35,6 +35,9 @@
 
 {% block body %}
 {{ super() }}
+{% if doc_md %}
+{{ doc_md }}
+{% endif %}
 <div style="float: left" class="form-inline">
   <form method="get" style="float:left;">
     Base date: {{ form.base_date(class_="form-control") }}
@@ -79,7 +82,7 @@
 $('span.status_square').tooltip({html: true});
 
 var devicePixelRatio = window.devicePixelRatio || 1;
-var data = {{ data|tojson|safe }};
+var data = {{ data|tojson }};
 var barHeight = 20;
 var axisHeight = 40;
 var square_x = parseInt(500 * devicePixelRatio);
