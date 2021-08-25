@@ -101,18 +101,21 @@
           Code
         </a>
       </li>
+      <!-- Trigger DAG
       <li style="display: none;">
         <a href="{{ url_for('Airflow.trigger', dag_id=dag.dag_id, origin=url_for('Airflow.' + dag.get_default_view(), dag_id=dag.dag_id)) }}">
           <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
           Trigger DAG
         </a>
       </li>
+      -->
       <li>
         <a href="{{ url_for('Airflow.refresh', dag_id=dag.dag_id) }}" title="Refresh" onclick="postAsForm(this.href); return false">
           <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
           Refresh
         </a>
       </li>
+      <!-- Delete
       <li>
         <a href="{{ url_for('Airflow.delete', dag_id=dag.dag_id, root=root) }}"
         onclick="return confirmDeleteDag(this, '{{ dag.safe_dag_id }}')">
@@ -120,6 +123,7 @@
         Delete
         </a>
       </li>
+      -->
     </ul>
   </div>
   <hr>
