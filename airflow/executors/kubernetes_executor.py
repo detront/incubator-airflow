@@ -611,7 +611,7 @@ class AirflowKubernetesScheduler(LoggingMixin):
             # attempt to avoid the extremely slow path by seeing if dag_id is valid to be added to
             # search query
             # if the dag_id comes back from the `safe_label` code unchanged, it is already a valid label
-            if self._make_safe_label_value(dag_id) == dag_id:
+            if pod_generator.make_safe_label_value(dag_id) == dag_id:
                 self.log.info('Attempting enhanced slow-path lookup as dag_id appears to be a valid K8 label')
                 tasks = (
                     session
