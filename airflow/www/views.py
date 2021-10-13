@@ -849,7 +849,7 @@ class Airflow(AirflowViewMixin, BaseView):
             if template_field in attr_renderer:
                 html_dict[template_field] = attr_renderer[template_field](content)
             else:
-                html_dict[template_field] = Markup("<pre><code>{}</pre></code>").format(pformat(content))
+                html_dict[template_field] = Markup("<pre><code>{}</pre></code>").format(content)
 
         return self.render(
             'airflow/ti_code.html',
