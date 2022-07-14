@@ -535,6 +535,9 @@ class BackfillJob(BaseJob):
                         ):
                             cfg_path = tmp_configuration_copy()
 
+                        # pass along the backfill command pool arg to the ti
+                        if self.pool:
+                            ti.pool = self.pool
                         executor.queue_task_instance(
                             ti,
                             mark_success=self.mark_success,
