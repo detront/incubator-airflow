@@ -26,6 +26,8 @@ import logging
 import os
 import subprocess
 from abc import abstractmethod
+# monkey patch multiprocessing based on https://github.com/apache/airflow/issues/14896
+import billiard as multiprocessing
 from multiprocessing import Manager, Process
 from multiprocessing.managers import SyncManager
 from queue import Empty, Queue  # pylint: disable=unused-import  # noqa: F401
